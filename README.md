@@ -2,7 +2,7 @@
 This is technical task for CML Team (Full Stack / Java Developer willing to develop Full Stack expertise)
 
 # Task Condition
-[Task Condition](https://www.postman.com/downloads/)
+[Task Condition](https://github.com/MikhailUsatenko/cmlteam-tech-task/blob/master/src/main/resources/File%20Storage%20REST%20Service%20-%20Java.docx.pdf)
 
 # How to run app
 1. docker run -d --name es762 -p 9200:9200 -e "discovery.type=single-node" elasticsearch:7.6.2
