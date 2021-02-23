@@ -10,8 +10,8 @@ import com.example.demo.factory.bean.FileUploadResponseBeanFactory;
 import com.example.demo.factory.bean.SuccessResponseBeanFactory;
 import com.example.demo.factory.exception.BadRequestExceptionFactory;
 import com.example.demo.factory.exception.NotFoundExceptionFactory;
-import com.example.demo.factory.pojo.FileFactory;
 import com.example.demo.service.FileService;
+import com.example.demo.test.factory.pojo.FileFactory;
 import com.example.demo.utils.JacksonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -272,22 +273,24 @@ class FileControllerTest {
         var pageQueryParamValue = 1;
         var sizeQueryParamValue = 5;
         var tagsQueryParamValue = "tag1,tag2,tag3";
+        var nameQueryParamValue = "abc";
         var tagsRequestParamValue = List.of(tagsQueryParamValue.split(","));
         var queryParams = new HttpHeaders() {{
             set("page", Integer.toString(pageQueryParamValue));
             set("size", Integer.toString(sizeQueryParamValue));
             set("tags", tagsQueryParamValue);
+            set("q", nameQueryParamValue);
         }};
-        var tags = List.of("tag1", "tag2", "tag3");
+        var tags = new HashSet<>(tagsRequestParamValue);
         var files = List.of(FileFactory.create("abc", "file.txt", 1000L, tags));
         var expectedResponseBody = FilePageResponseBeanFactory.create(1, files);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
         var request = MockMvcRequestBuilders.get(url).queryParams(queryParams).accept(MediaType.APPLICATION_JSON);
-        when(fileService.getFiles(pageQueryParamValue, sizeQueryParamValue, tagsRequestParamValue)).thenReturn(expectedResponseBody);
+        when(fileService.getFiles(pageQueryParamValue, sizeQueryParamValue, tagsRequestParamValue, nameQueryParamValue)).thenReturn(expectedResponseBody);
         // act
         var resultActions = mvc.perform(request);
         // assert
         resultActions.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().string(expectedResponseBodyJson));
-        verify(fileService, times(1)).getFiles(pageQueryParamValue, sizeQueryParamValue, tagsRequestParamValue);
+        verify(fileService, times(1)).getFiles(pageQueryParamValue, sizeQueryParamValue, tagsRequestParamValue, nameQueryParamValue);
     }
 }

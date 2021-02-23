@@ -48,8 +48,9 @@ public class FileController {
     @GetMapping(value = ControllerAPI.FILE_CONTROLLER_GET_FILES, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FilePageResponseBean> getFiles(@RequestParam(required = false, defaultValue = "0") int page,
                                                          @RequestParam(required = false, defaultValue = "10") int size,
-                                                         @RequestParam(required = false, defaultValue = "") List<String> tags) {
-        var responseBean = fileService.getFiles(page, size, tags);
+                                                         @RequestParam(required = false, defaultValue = "") List<String> tags,
+                                                         @RequestParam(required = false, defaultValue = "", value = "q") String name) {
+        var responseBean = fileService.getFiles(page, size, tags, name);
         return ResponseEntity.ok(responseBean);
     }
 

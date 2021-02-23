@@ -5,8 +5,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document(indexName = "file")
 @Data
@@ -23,5 +23,5 @@ public class File {
     private long size;
 
     @JsonProperty
-    private List<String> tags = new ArrayList<>();
+    private Set<String> tags = new HashSet<>();
 }

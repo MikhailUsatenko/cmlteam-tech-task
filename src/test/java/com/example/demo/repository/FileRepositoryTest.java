@@ -1,9 +1,8 @@
 package com.example.demo.repository;
 
 import com.example.demo.config.AppConfig;
-import com.example.demo.factory.pojo.FileFactory;
 import com.example.demo.pojo.File;
-import com.example.demo.utils.ElasticsearchQueryUtils;
+import com.example.demo.test.factory.pojo.FileFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,11 +49,11 @@ class FileRepositoryTest {
     private final FileRepository fileRepository;
 
     private static final List<File> files = List.of(
-            FileFactory.create("ID-1","file-1.txt", List.of("tag1")),
-            FileFactory.create("ID-2","file-2.txt", List.of("tag1", "tag2")),
-            FileFactory.create("ID-3","file-3.txt", List.of("tag1", "tag2", "tag3")),
-            FileFactory.create("ID-4","file-4.txt", List.of("tag2", "tag3")),
-            FileFactory.create("ID-5","file-5.txt", List.of("tag3"))
+            FileFactory.create("ID-1","file-aaaaaaa.txt", Set.of("tag1")),
+            FileFactory.create("ID-2","file-bbbb aaa ccc.txt", Set.of("tag1", "tag2")),
+            FileFactory.create("ID-3","file-AaAA.txt", Set.of("tag1", "tag2", "tag3")),
+            FileFactory.create("ID-4","file-4.txt", Set.of("tag2", "tag3")),
+            FileFactory.create("ID-5","file-5.txt", Set.of("tag3"))
     );
 
     @BeforeEach
@@ -68,30 +68,27 @@ class FileRepositoryTest {
     }
 
     @Test
-    void findByIdAndTagsUsingCustomQuery() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findByIdAndTagsUsingCustomQuery", "Method description");
+    void findByIdAndTags() {
+        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findByIdAndTags", "Method description");
         // arrange
         var id = "ID-3";
         var tags = List.of("tag1", "tag2");
-        var tagsQueryExpr = ElasticsearchQueryUtils.getTagsQueryExpr(tags);
-        var expectedFileOptional = files.stream().filter(file -> file.getId().equals(id) && file.getTags().containsAll(tags)).findFirst();
+        var expectedFileOptional = files.stream().filter(file -> file.getTags().containsAll(tags) && file.getId().equals(id)).findFirst();
         // act
-        var fileOptional = fileRepository.findByIdAndTagsUsingCustomQuery(id, tagsQueryExpr);
+        var fileOptional = fileRepository.findByIdAndTags(id, tags);
         // assert
         assertEquals(expectedFileOptional, fileOptional);
-
     }
 
     @Test
-    void findAllByTagsUsingCustomQuery() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findAllByTagsUsingCustomQuery", "Method description");
+    void findAllByNameContainingIgnoreCase() {
+        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findAllByNameContainingIgnoreCase", "Method description");
         // arrange
-        var tags = List.of("tag1", "tag2");
-        var tagsQueryExpr = ElasticsearchQueryUtils.getTagsQueryExpr(tags);
+        var name = "aaa";
         var pageRequest = PageRequest.of(0, 10);
-        var expectedFiles = files.stream().filter(file -> file.getTags().containsAll(tags)).collect(Collectors.toList());
+        var expectedFiles = files.stream().filter(file -> file.getName().toUpperCase().contains(name.toUpperCase())).collect(Collectors.toList());
         // act
-        var page = fileRepository.findAllByTagsUsingCustomQuery(tagsQueryExpr, pageRequest);
+        var page = fileRepository.findAllByNameContainingIgnoreCase(name, pageRequest);
         // assert
         var content = page.getContent();
         assertEquals(expectedFiles.size(), page.getTotalElements());
@@ -100,5 +97,25 @@ class FileRepositoryTest {
         assertTrue(content.containsAll(expectedFiles));
     }
 
+    @Test
+    void findAllByTagsAndNameContainingIgnoreCase() {
+        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findAllByTagsAndNameContainingIgnoreCase", "Method description");
+        // arrange
+        var name = "aaa";
+        var tags = List.of("tag1", "tag2");
+        var pageRequest = PageRequest.of(0, 10);
+        var expectedFiles = files.stream().filter(file -> isFilenameContainsIgnoreCase(file, name) && file.getTags().containsAll(tags)).collect(Collectors.toList());
+        // act
+        var page = fileRepository.findAllByTagsAndNameContainingIgnoreCase(tags, name, pageRequest);
+        // assert
+        var content = page.getContent();
+        assertEquals(expectedFiles.size(), page.getTotalElements());
+        assertEquals(expectedFiles.size(), content.size());
+        assertTrue(expectedFiles.containsAll(content));
+        assertTrue(content.containsAll(expectedFiles));
+    }
 
+    private boolean isFilenameContainsIgnoreCase(File file, String name) {
+        return file.getName().toUpperCase().contains(name.toUpperCase());
+    }
 }
