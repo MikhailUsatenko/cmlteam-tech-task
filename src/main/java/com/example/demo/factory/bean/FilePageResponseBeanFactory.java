@@ -15,9 +15,6 @@ public class FilePageResponseBeanFactory {
     }
 
     public static FilePageResponseBean create(Page<File> page) {
-        var bean = new FilePageResponseBean();
-        bean.setTotal(page.getTotalElements());
-        bean.setFiles(page.getContent());
-        return bean;
+        return create(page.getTotalElements(), page.getContent());
     }
 }
