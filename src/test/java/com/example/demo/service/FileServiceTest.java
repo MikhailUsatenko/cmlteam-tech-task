@@ -9,6 +9,7 @@ import com.example.demo.factory.bean.FileUploadResponseBeanFactory;
 import com.example.demo.factory.bean.SuccessResponseBeanFactory;
 import com.example.demo.pojo.File;
 import com.example.demo.repository.FileRepository;
+import com.example.demo.test.constants.ConstantsForTest;
 import com.example.demo.test.factory.pojo.FileFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,13 +56,13 @@ class FileServiceTest {
 
     @Test
     void upload() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var name = "file.txt";
-        var size = 1000L;
+        var name = ConstantsForTest.DEFAULT_FILE_NAME;
+        var size = ConstantsForTest.DEFAULT_FILE_SIZE;
         var requestBean = FileUploadRequestBeanFactory.create(name, size);
         var file = FileFactory.create(requestBean);
-        var fileWithId = FileFactory.create("abc", name, size);
+        var fileWithId = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, name, size);
         var expectedResponseBean = FileUploadResponseBeanFactory.create(fileWithId);
         fileService.addTagByFileExtension(file);
         when(fileRepository.save(file)).thenReturn(fileWithId);
@@ -74,10 +75,10 @@ class FileServiceTest {
 
     @Test
     void delete() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "delete", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "delete", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
-        var file = FileFactory.create("abc", "file.txt", 1000L);
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         var mockFileOptional = Optional.of(file);
         var expectedResponseBean = SuccessResponseBeanFactory.create();
         when(fileRepository.findById(id)).thenReturn(mockFileOptional);
@@ -91,10 +92,10 @@ class FileServiceTest {
 
     @Test
     void fileNotFoundForDelete() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "delete", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "delete", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
-        var file = FileFactory.create("abc", "file.txt", 1000L);
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         Optional<File> mockFileOptional = Optional.empty();
         when(fileRepository.findById(id)).thenReturn(mockFileOptional);
         // act
@@ -107,11 +108,11 @@ class FileServiceTest {
 
     @Test
     void assignTags() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "assignTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "assignTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var tags = List.of("tag1", "tag1", "tag2", "tag3");
-        var file = FileFactory.create("abc", "file.txt", 1000L);
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         var mockFileOptional = Optional.of(file);
         var expectedResponseBean = SuccessResponseBeanFactory.create();
         var expectedFileTags = new HashSet<>(tags);
@@ -127,11 +128,11 @@ class FileServiceTest {
 
     @Test
     void fileNotFoundForAssignTags() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "assignTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "assignTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var tags = List.of("tag1", "tag2", "tag3");
-        var file = FileFactory.create("abc", "file.txt", 1000L);
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         Optional<File> mockFileOptional = Optional.empty();
         when(fileRepository.findById(id)).thenReturn(mockFileOptional);
         // act
@@ -145,11 +146,11 @@ class FileServiceTest {
 
     @Test
     void deleteTags() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "deleteTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "deleteTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var tags = List.of("tag1", "tag2", "tag3");
-        var file = FileFactory.create("abc", "file.txt", 1000L, new HashSet<>(tags));
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE, new HashSet<>(tags));
         var mockFileOptional = Optional.of(file);
         var expectedResponseBean = SuccessResponseBeanFactory.create();
         when(fileRepository.findByIdAndTags(id, tags)).thenReturn(mockFileOptional);
@@ -164,11 +165,11 @@ class FileServiceTest {
 
     @Test
     void tagNotFound() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "deleteTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "deleteTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var tags = List.of("tag1", "tag2", "tag3");
-        var file = FileFactory.create("abc", "file.txt", 1000L);
+        var file = FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         Optional<File> mockFileOptional = Optional.empty();
         when(fileRepository.findByIdAndTags(id, tags)).thenReturn(mockFileOptional);
         // act
@@ -183,14 +184,14 @@ class FileServiceTest {
 
     @Test
     void getFiles() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "getFiles", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "getFiles", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var page = 1;
         var size = 5;
         var tags = List.of("tag1", "tag2");
-        var name = "abc";
+        var name = ConstantsForTest.DEFAULT_FILE_NAME;
         var pageRequest = PageRequest.of(page, size);
-        var files = List.of(FileFactory.create("abc", "file.txt", 1000L, new HashSet<>(tags)));
+        var files = List.of(FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE, new HashSet<>(tags)));
         Page<File> mockFilesPage = new PageImpl(files);
         var expectedResponseBean = FilePageResponseBeanFactory.create(mockFilesPage);
         when(fileRepository.findAllByTagsAndNameContainingIgnoreCase(tags, name,pageRequest)).thenReturn(mockFilesPage);
@@ -203,14 +204,14 @@ class FileServiceTest {
 
     @Test
     void getFilesByEmptyTags() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "getFiles", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "getFiles", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var page = 1;
         var size = 5;
         List<String> tags = List.of();
-        var name = "abc";
+        var name = ConstantsForTest.DEFAULT_FILE_NAME;
         var pageRequest = PageRequest.of(page, size);
-        var files = List.of(FileFactory.create("abc", "file.txt", 1000L, new HashSet<>(tags)));
+        var files = List.of(FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE, new HashSet<>(tags)));
         Page<File> mockFilesPage = new PageImpl(files);
         var expectedResponseBean = FilePageResponseBeanFactory.create(mockFilesPage);
         when(fileRepository.findAllByNameContainingIgnoreCase(name, pageRequest)).thenReturn(mockFilesPage);
@@ -223,9 +224,9 @@ class FileServiceTest {
 
     @Test
     void addTagByFileExtension() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "addTagByFileExtension", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "addTagByFileExtension", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var file = FileFactory.create("file.mp3", 100L);
+        var file = FileFactory.create("file.mp3", ConstantsForTest.DEFAULT_FILE_SIZE);
         var expectedTags = Set.of("audio");
         // act
         fileService.addTagByFileExtension(file);
@@ -235,9 +236,9 @@ class FileServiceTest {
 
     @Test
     void addTagByUnknownFileExtension() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileService.class.getSimpleName(), "addTagByFileExtension", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileService.class.getSimpleName(), "addTagByFileExtension", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var file = FileFactory.create("file.docx", 100L);
+        var file = FileFactory.create("file.docx", ConstantsForTest.DEFAULT_FILE_SIZE);
         // act
         fileService.addTagByFileExtension(file);
         // assert

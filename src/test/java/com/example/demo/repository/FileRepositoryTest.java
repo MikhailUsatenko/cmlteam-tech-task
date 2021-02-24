@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.config.AppConfig;
 import com.example.demo.pojo.File;
+import com.example.demo.test.constants.ConstantsForTest;
 import com.example.demo.test.factory.pojo.FileFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +70,7 @@ class FileRepositoryTest {
 
     @Test
     void findByIdAndTags() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findByIdAndTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileRepository.class.getSimpleName(), "findByIdAndTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var id = "ID-3";
         var tags = List.of("tag1", "tag2");
@@ -82,7 +83,7 @@ class FileRepositoryTest {
 
     @Test
     void findAllByNameContainingIgnoreCase() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findAllByNameContainingIgnoreCase", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileRepository.class.getSimpleName(), "findAllByNameContainingIgnoreCase", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var name = "aaa";
         var pageRequest = PageRequest.of(0, 10);
@@ -99,9 +100,9 @@ class FileRepositoryTest {
 
     @Test
     void findAllByTagsAndNameContainingIgnoreCase() {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileRepository.class.getSimpleName(), "findAllByTagsAndNameContainingIgnoreCase", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileRepository.class.getSimpleName(), "findAllByTagsAndNameContainingIgnoreCase", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
-        var name = "aaa";
+        var name = "aaA";
         var tags = List.of("tag1", "tag2");
         var pageRequest = PageRequest.of(0, 10);
         var expectedFiles = files.stream().filter(file -> isFilenameContainsIgnoreCase(file, name) && file.getTags().containsAll(tags)).collect(Collectors.toList());

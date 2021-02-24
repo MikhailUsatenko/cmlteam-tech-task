@@ -11,6 +11,7 @@ import com.example.demo.factory.bean.SuccessResponseBeanFactory;
 import com.example.demo.factory.exception.BadRequestExceptionFactory;
 import com.example.demo.factory.exception.NotFoundExceptionFactory;
 import com.example.demo.service.FileService;
+import com.example.demo.test.constants.ConstantsForTest;
 import com.example.demo.test.factory.pojo.FileFactory;
 import com.example.demo.utils.JacksonUtils;
 import lombok.RequiredArgsConstructor;
@@ -62,10 +63,10 @@ class FileControllerTest {
      */
     @Test
     void upload() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_UPLOAD_FILE;
-        var requestBody = FileUploadRequestBeanFactory.create("file.txt", 1000L);
+        var requestBody = FileUploadRequestBeanFactory.create(ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE);
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = FileUploadResponseBeanFactory.create("");
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
@@ -83,10 +84,10 @@ class FileControllerTest {
      */
     @Test
     void nameIsNotPresent() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_UPLOAD_FILE;
-        var requestBody = FileUploadRequestBeanFactory.create(null, 1000L);
+        var requestBody = FileUploadRequestBeanFactory.create(null, ConstantsForTest.DEFAULT_FILE_SIZE);
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = BadRequestExceptionFactory.create(ExceptionMessages.FILENAME_MUST_NOT_BE_BLANK);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
@@ -102,10 +103,10 @@ class FileControllerTest {
      */
     @Test
     void nameIsBlank() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_UPLOAD_FILE;
-        var requestBody = FileUploadRequestBeanFactory.create("   ", 1000L);
+        var requestBody = FileUploadRequestBeanFactory.create("   ", ConstantsForTest.DEFAULT_FILE_SIZE);
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = BadRequestExceptionFactory.create(ExceptionMessages.FILENAME_MUST_NOT_BE_BLANK);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
@@ -121,10 +122,10 @@ class FileControllerTest {
      */
     @Test
     void sizeIsNotPresent() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_UPLOAD_FILE;
-        var requestBody = FileUploadRequestBeanFactory.create("file.txt", null);
+        var requestBody = FileUploadRequestBeanFactory.create(ConstantsForTest.DEFAULT_FILE_NAME, null);
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = BadRequestExceptionFactory.create(ExceptionMessages.FILE_SIZE_MUST_NOT_BE_NULL);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
@@ -140,10 +141,10 @@ class FileControllerTest {
      */
     @Test
     void sizeIsNegative() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "upload", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "upload", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_UPLOAD_FILE;
-        var requestBody = FileUploadRequestBeanFactory.create("file.txt", -1L);
+        var requestBody = FileUploadRequestBeanFactory.create(ConstantsForTest.DEFAULT_FILE_NAME, -1L);
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = BadRequestExceptionFactory.create(ExceptionMessages.FILE_SIZE_MUST_NOT_BE_NEGATIVE);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
@@ -160,10 +161,10 @@ class FileControllerTest {
      */
     @Test
     void delete() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "delete", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "delete", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_DELETE_FILE;
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var expectedResponseBody = SuccessResponseBeanFactory.create();
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
         var request = MockMvcRequestBuilders.delete(url, id).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -180,10 +181,10 @@ class FileControllerTest {
      */
     @Test
     void fileNotFound() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "delete", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "delete", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_DELETE_FILE;
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var expectedResponseBody = NotFoundExceptionFactory.create(ExceptionMessages.FILE_NOT_FOUND);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
         var request = MockMvcRequestBuilders.delete(url, id).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
@@ -201,10 +202,10 @@ class FileControllerTest {
      */
     @Test
     void assignTags() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "assignTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "assignTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_POST_ASSIGN_TAGS;
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var requestBody = List.of("tag1", "tag2", "tag3");
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = SuccessResponseBeanFactory.create();
@@ -223,10 +224,10 @@ class FileControllerTest {
      */
     @Test
     void deleteTags() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "deleteTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "deleteTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_DELETE_TAGS;
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var requestBody = List.of("tag1", "tag2", "tag3");
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = SuccessResponseBeanFactory.create();
@@ -245,10 +246,10 @@ class FileControllerTest {
      */
     @Test
     void tagNotFound() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "deleteTags", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "deleteTags", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_DELETE_TAGS;
-        var id = "abc";
+        var id = ConstantsForTest.DEFAULT_FILE_ID;
         var requestBody = List.of("tag1", "tag2", "tag3");
         var requestBodyJson = JacksonUtils.getJson(requestBody);
         var expectedResponseBody = BadRequestExceptionFactory.create(ExceptionMessages.TAG_NOT_FOUND);
@@ -267,13 +268,13 @@ class FileControllerTest {
      */
     @Test
     void getFiles() throws Exception {
-        log.info("Test class: {}; Test method: {}; Description: {}", FileController.class.getSimpleName(), "getFiles", "Method description");
+        log.info(ConstantsForTest.DEFAULT_LOG_MESSAGE_FORMAT_FOR_TEST_METHOD, FileController.class.getSimpleName(), "getFiles", ConstantsForTest.DEFAULT_DESCRIPTION_FOR_TEST_METHOD);
         // arrange
         var url = ControllerAPI.FILE_CONTROLLER + ControllerAPI.FILE_CONTROLLER_GET_FILES;
         var pageQueryParamValue = 1;
         var sizeQueryParamValue = 5;
         var tagsQueryParamValue = "tag1,tag2,tag3";
-        var nameQueryParamValue = "abc";
+        var nameQueryParamValue = ConstantsForTest.DEFAULT_FILE_NAME;
         var tagsRequestParamValue = List.of(tagsQueryParamValue.split(","));
         var queryParams = new HttpHeaders() {{
             set("page", Integer.toString(pageQueryParamValue));
@@ -282,7 +283,7 @@ class FileControllerTest {
             set("q", nameQueryParamValue);
         }};
         var tags = new HashSet<>(tagsRequestParamValue);
-        var files = List.of(FileFactory.create("abc", "file.txt", 1000L, tags));
+        var files = List.of(FileFactory.create(ConstantsForTest.DEFAULT_FILE_ID, ConstantsForTest.DEFAULT_FILE_NAME, ConstantsForTest.DEFAULT_FILE_SIZE, tags));
         var expectedResponseBody = FilePageResponseBeanFactory.create(1, files);
         var expectedResponseBodyJson = JacksonUtils.getJson(expectedResponseBody);
         var request = MockMvcRequestBuilders.get(url).queryParams(queryParams).accept(MediaType.APPLICATION_JSON);
